@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Login() {
-  const [enteredValue, setEnteredValue] = useState({
-    email: "",
-    password: "",
-  });
+  const [emialIsInvalid, setEmailIsInvalid] = useState(false);
+  const email = useRef();
+  const password = useRef();
+
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(enteredValue);
+    const enteredEmail = email.current.value;
+    const enteredPassword = password.current.value;
+    console.log(enteredEmail, enteredPassword);
+
+    const emailIsvalid = enteredEmail.includes("@");
+
+    if (!emailIsvalid) {
+      setEmailIsInvalid(true);
+      return;
+    }
+
+    setEmailIsInvalid(true);
   }
-  function handleEnteredInput(identifier, value) {
-    setEnteredValue((prevValue) => ({
-      ...prevValue,
-      [identifier]: value,
-    }));
-  }
+  // function handleEnteredInput(identifier, value) {
+  //   setEnteredValue((prevValue) => ({
+  //     ...prevValue,
+  //     [identifier]: value,
+  //   }));
+  // }
 
   return (
     <form onSubmit={handleSubmit}>
@@ -27,11 +38,15 @@ export default function Login() {
             id="email"
             type="email"
             name="email"
-            onChange={(event) =>
-              handleEnteredInput("email", event.target.value)
-            }
-            value={enteredValue.email}
+            // onChange={(event) =>
+            //   handleEnteredInput("email", event.target.value)
+            // }
+            // value={enteredValue.email}
+            ref={email}
           />
+          <div className="control-error">
+            {emialIsInvalid && <p>Please Enter Valid Email Address</p>}
+          </div>
         </div>
 
         <div className="control no-margin">
@@ -40,10 +55,11 @@ export default function Login() {
             id="password"
             type="password"
             name="password"
-            onChange={(event) =>
-              handleEnteredInput("password", event.target.value)
-            }
-            value={enteredValue.password}
+            // onChange={(event) =>
+            //   handleEnteredInput("password", event.target.value)
+            // }
+            // value={enteredValue.password}
+            ref={password}
           />
         </div>
       </div>
