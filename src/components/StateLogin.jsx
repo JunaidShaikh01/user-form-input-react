@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import { isEmail, isNotEmpty, hasMinLength } from "../util/validation.js";
 export default function Login() {
   const [enteredValue, setEnteredValue] = useState({
     email: "",
@@ -11,8 +11,12 @@ export default function Login() {
     password: false,
   });
 
-  const emialISValid = didEdit.email && !enteredValue.email.includes("@");
-
+  const emialISValid =
+    didEdit.email &&
+    !isEmail(enteredValue.email) &&
+    !isNotEmpty(enteredValue.email);
+  const passwordIsInValid =
+    didEdit.password && !hasMinLength(enteredValue.password, 8);
   function handleSubmit(event) {
     event.preventDefault();
     console.log(enteredValue);
@@ -67,6 +71,11 @@ export default function Login() {
             }
             value={enteredValue.password}
           />
+          <div className="control-error">
+            {passwordIsInValid && (
+              <p>Please Enter proper 8 cherecter password</p>
+            )}
+          </div>
         </div>
       </div>
 
